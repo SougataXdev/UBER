@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model");
 const createUser = require("../services/user.service");
+const BlacklistedTokenModel = require("../models/blacklistToken.model");
 
 const registerUser = async (req, res) => {
     try {
@@ -58,6 +59,14 @@ const loginUser = async (req, res) => {
         // Generate auth token
         const token = existingUser.generateAuthToken();
 
+        // Set the token as a cookie
+        res.cookie("token", token, {
+            httpOnly: true,        // Prevents JavaScript access to cookies
+            secure: process.env.NODE_ENV === "production", // Sends the cookie only over HTTPS in production
+            sameSite: "strict",    // Prevents cross-site request forgery (CSRF)
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+        });
+
         return res.status(200).json({
             message: "Login successful",
             success: true,
@@ -65,7 +74,7 @@ const loginUser = async (req, res) => {
                 id: existingUser._id,
                 fullname: existingUser.fullname,
                 email: existingUser.email,
-                token
+                token, // You may optionally choose not to return the token here
             },
         });
     } catch (error) {
@@ -74,7 +83,22 @@ const loginUser = async (req, res) => {
 };
 
 
+
+const getUserProfile = async(req , res)=>{
+    return res.status(200).json(req.user);
+}
+
+const logout = async(req , res)=>{
+    res.clearCookie("token");
+    const token =req.cookies.token || req.headers.authorization.split(" ")[1];
+    await BlacklistedTokenModel.create({token});
+
+    res.status(200).json({message:"logged out"})
+}
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getUserProfile,
+    logout
 }
