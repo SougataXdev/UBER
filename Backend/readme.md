@@ -61,7 +61,7 @@ The body of the request must be in JSON format and include the following fields:
 
 
 
-## Captain Registration API Documentation
+# Captain Registration API Documentation
 
 ## **Endpoint**
 `POST /captains/register`
