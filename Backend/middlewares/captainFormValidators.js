@@ -43,7 +43,7 @@ const captainRegistrationFormValidator = (req, res, next) => {
 
     if (!result.success) {
         return res.status(400).json({
-            error: "captain Validation failed",
+            error: "Captain registration validation failed",
             details: result.error.errors,
         });
     }
@@ -52,4 +52,24 @@ const captainRegistrationFormValidator = (req, res, next) => {
     next(); // Proceed to the next middleware or route handler
 };
 
-module.exports = captainRegistrationFormValidator;
+// Captain Login Validator
+const captainLoginValidator = (req, res, next) => {
+    const schema = z.object({
+        email: z.string().email("Invalid email address").nonempty("Email is required"),
+        password: z.string().min(6, "Password must be at least 6 characters long").nonempty("Password is required"),
+    });
+
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+        return res.status(400).json({
+            error: "Captain login validation failed",
+            details: result.error.errors,
+        });
+    }
+
+    req.validatedData = result.data; // Attach validated data to request
+    next(); // Proceed to the next middleware or route handler
+};
+
+module.exports = { captainRegistrationFormValidator, captainLoginValidator };

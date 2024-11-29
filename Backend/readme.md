@@ -163,5 +163,130 @@ Copy code
 }
 ```
 
+# **API Documentation: Login, Profile, and Logout Routes**
 
-##
+---
+
+## **1. Login Route**
+
+### **Endpoint**
+- **POST** `/login`
+
+### **Description**
+- Authenticates a user or captain by verifying their email and password.
+- On successful authentication, a JWT token is generated and returned.
+
+### **Request Headers**
+- **Content-Type**: `application/json`
+
+### **Request Body**
+
+#### **User Login Example**
+```json
+{
+    "email": "user@example.com",
+    "password": "userpassword123"
+}
+```
+
+## Captain Login Example
+```json
+{
+    "email": "captain@example.com",
+    "password": "captainpassword123"
+}
+```
+
+## Response
+### Success Response
+- Status Code: 200 OK
+
+
+## Captain Login Success
+```json
+
+{
+    "message": "Login successful",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "captain": {
+        "_id": "captain_id",
+        "fullname": {
+            "firstname": "Jane",
+            "lastname": "Smith"
+        },
+        "email": "captain@example.com",
+        "status": "inactive",
+        "vahicle": {
+            "color": "Red",
+            "plate": "XYZ-1234",
+            "capacity": 4,
+            "vahicleType": "car"
+        }
+    }
+}
+````
+
+## **2. Profile Route**
+
+### **Endpoint**
+- **GET** `captains/profile`
+
+### **Description**
+- Fetches the authenticated captain's profile.
+- Requires a valid JWT token for authentication.
+
+### **Request Headers**
+- **Content-Type**: `application/json`
+- **Authorization**: `Bearer <token>`
+
+### **Response**
+
+#### **Success Response**
+- **Status Code**: `200 OK`
+
+##### **User Profile**
+```json
+{
+    "message": "Profile retrieved successfully",
+    "captain": {
+        "_id": "captain_id",
+        "fullname": {
+            "firstname": "Jane",
+            "lastname": "Smith"
+        },
+        "email": "captain@example.com",
+        "status": "active",
+        "vahicle": {
+            "color": "Red",
+            "plate": "XYZ-1234",
+            "capacity": 4,
+            "vahicleType": "car"
+        }
+    }
+}
+```
+
+
+## **3. Logout Route**
+
+### **Endpoint**
+- **POST** `captains/logout`
+
+### **Description**
+- Logs  captain out by blacklisting their JWT token and removing it from cookies.
+
+### **Request Headers**
+- **Content-Type**: `application/json`
+
+### **Request Body**
+- No request body is required.
+
+### **Response**
+
+#### **Success Response**
+- **Status Code**: `200 OK`
+```json
+{
+    "message": "Logout successful"
+}
+```
