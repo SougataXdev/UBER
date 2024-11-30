@@ -61,7 +61,7 @@ The body of the request must be in JSON format and include the following fields:
 
 
 
-## Captain Registration API Documentation
+# Captain Registration API Documentation
 
 ## **Endpoint**
 `POST /captains/register`
@@ -163,17 +163,17 @@ Copy code
 }
 ```
 
-# **API Documentation: Login, Profile, and Logout Routes**
+# **API Documentation:Captains Login, Profile, and Logout Routes**
 
 ---
 
 ## **1. Login Route**
 
 ### **Endpoint**
-- **POST** `/login`
+- **POST** `captains/login`
 
 ### **Description**
-- Authenticates a user or captain by verifying their email and password.
+- Authenticates a captain by verifying their email and password.
 - On successful authentication, a JWT token is generated and returned.
 
 ### **Request Headers**
