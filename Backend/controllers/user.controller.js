@@ -4,8 +4,8 @@ const BlacklistedTokenModel = require("../models/blacklistToken.model");
 
 const registerUser = async (req, res) => {
     try {
-        const {fullname, email, password } = req.body;
-        const {firstname , lastname} = fullname;
+        const { fullname, email, password } = req.body;
+        const { firstname, lastname } = fullname;
 
         // Check if the user already exists
         const existingUser = await userModel.findOne({ email });
@@ -24,9 +24,9 @@ const registerUser = async (req, res) => {
 
         const token = newUser.generateAuthToken();
 
-        return res.status(201).json({ 
-            message: "User registered successfully", 
-            success: true, 
+        return res.status(201).json({
+            message: "User registered successfully",
+            success: true,
             user: {
                 id: newUser._id,
                 fullname: newUser.fullname,
@@ -84,16 +84,18 @@ const loginUser = async (req, res) => {
 
 
 
-const getUserProfile = async(req , res)=>{
+const getUserProfile = async (req, res) => {
     return res.status(200).json(req.user);
 }
 
-const logout = async(req , res)=>{
+const logout = async (req, res) => {
     res.clearCookie("token");
-    const token =req.cookies.token || req.headers.authorization.split(" ")[1];
-    await BlacklistedTokenModel.create({token});
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    console.log(token)
+    await BlacklistedTokenModel.create({ token });
 
-    res.status(200).json({message:"logged out"})
+    res.status(200).json({ message: "logged out" })
+    console.log("logout executed sucessfully")
 }
 
 module.exports = {

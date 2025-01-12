@@ -7,14 +7,11 @@ const captainSchema = new mongoose.Schema({
         firstname: {
             type: String,
             required: true,
-            minlength: [3, "name must be atlest 3 chars"]
-
-
-        }
-        ,
+            minlength: [3, "Firstname must be at least 3 characters long"],
+        },
         lastname: {
             type: String,
-            minlength: [3, "name must be atlest 3 chars"]
+            minlength: [3, "Lastname must be at least 3 characters long"],
         }
     },
     email: {
@@ -26,57 +23,58 @@ const captainSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select: false
+        select: false,
     },
     socketId: {
-        type: String
+        type: String,
     },
     status: {
         type: String,
         enum: ["active", "inactive"],
-        default: "inactive"
+        default: "inactive",
     },
-    vahicle: {
+    vehicle: {
         color: {
             type: String,
             required: true,
-            minlengthL: [3, "color must be atkest 3 chars"]
+            minlength: [3, "Color must be at least 3 characters long"],
         },
         plate: {
             type: String,
             required: true,
-            minlength: [3, "plate must be 3 chars"]
+            minlength: [3, "Plate must be at least 3 characters long"],
         },
         capacity: {
             type: Number,
             required: true,
-            min: [1, "capacity must be atleast 1"]
+            min: [1, "Capacity must be at least 1"],
         },
-        vahicleType: {
+        vehicleType: {
             type: String,
             required: true,
-            enum: ["car", "motorcycle", "auto", "toto"]
-        }
-    },
-    location:{
-        lat:{
-            type:Number,
-
+            enum: ["car", "motorcycle", "auto", "toto"],
         },
-        lng:{
-            type:String
+    },
+    
+    location: {
+        lat: {
+            type: Number,
+        },
+        lng: {
+            type: String,
         }
     }
 });
 
 
-captainSchema.methods.generateAuthToken = function(){
-    const token = JWT.sign({_id:this.id} , process.env.JWT_SECRET ,{expiresIn:"24h"});
+
+captainSchema.methods.generateAuthToken = function () {
+    const token = JWT.sign({ _id: this.id }, process.env.JWT_SECRET, { expiresIn: "24h" });
     return token;
 }
 
-captainSchema.methods.comparePassword = async function(password){
-    return await bcrypt.compare(password , this.password);
+captainSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
 }
 
 captainSchema.statics.hashPassword = async function (password) {
@@ -84,7 +82,7 @@ captainSchema.statics.hashPassword = async function (password) {
 };
 
 
-const captainModel = mongoose.model("captain" , captainSchema);
+const captainModel = mongoose.model("captain", captainSchema);
 
 
 module.exports = captainModel;

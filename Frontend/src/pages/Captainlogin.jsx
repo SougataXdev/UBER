@@ -1,20 +1,40 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Captainlogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [captainData, setCaptainData] = useState({});
-  const submitHandler = (e)=>{
+  const [ email, setEmail ] = useState('')
+  const [ password, setPassword ] = useState('')
+
+  const { captain, setCaptain } = React.useContext(CaptainDataContext);
+  const navigate = useNavigate()
+
+
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
-      email:email,
-      password:password
-    });
-    console.log(captainData)
-    setEmail("");
-    setPassword("");
+    const captain = {
+      email: email,
+      password
+    }
+
+    const response = await axios.post("captains/login", captain)
+
+    if (response.status === 200) {
+      const data = response.data;
+      console.log(data)
+      setCaptain(data.captain)
+      localStorage.setItem('token', data.token)
+      navigate('/captain-home')
+
+    }
+
+    setEmail('')
+    setPassword('')
   }
+
   return (
     <div className="p-7 flex flex-col justify-between h-screen">
       <div>
@@ -23,9 +43,12 @@ const Captainlogin = () => {
           src="https://www.svgrepo.com/show/505031/uber-driver.svg"
           alt=""
         />
-        <form action="" onSubmit={(e)=>{
-          submitHandler(e)
-        }}>
+        <form
+          action=""
+          onSubmit={(e) => {
+            submitHandler(e);
+          }}
+        >
           <h3 className="text-lg font-medium mb-2">What's your email</h3>
           <input
             className="bg-[#eeee] mb-7 rounded px-4 py-2 border w-full text-lg placeholder:text-base"
@@ -61,13 +84,14 @@ const Captainlogin = () => {
         </p>
       </div>
       <div>
-        <Link to="/login"><button className="bg-[#111] text-white font-semibold  mb-7 rounded px-4 py-2 w-full text-lg placeholder:text-base">
-          Sign in as User
-        </button>
+        <Link to="/login">
+          <button className="bg-[#111] text-white font-semibold  mb-7 rounded px-4 py-2 w-full text-lg placeholder:text-base">
+            Sign in as User
+          </button>
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Captainlogin;
