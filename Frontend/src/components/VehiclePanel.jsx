@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const VehiclePanel = (props) => {
   return (
@@ -9,7 +10,9 @@ const VehiclePanel = (props) => {
             <i className="ri-arrow-down-wide-line"></i>
           </h2>
         </div>
-        <div className="w-full mb-2 p-2 border-2 active:border-black rounded-xl flex items-center justify-between">
+        <div onClick={()=>{props.setRidePanelOpen(true);
+          props.setVehiclePanelOpen(false);
+        }} className="w-full mb-2 p-2 border-2 active:border-black rounded-xl flex items-center justify-between">
           <img
             className="h-20"
             src="https://i.pinimg.com/474x/8d/21/7b/8d217b1000b642005fea7b6fd6c3d967.jpg"
